@@ -1,6 +1,4 @@
 const logo = require('../static/logo.svg');
-var canvas = document.getElementById('target');
-var ctx = canvas.getContext('2d');
 
 function start(img1, img2) {
   var im = document.getElementById('t2');
@@ -20,13 +18,17 @@ function start(img1, img2) {
 
 var img = new Image();
 img.onload = function() {
+  var canvas = document.getElementById('target');
+  var ctx = canvas.getContext('2d');
+
   var w = 64;
   var h = w * img.height / img.width;
   canvas.width = w;
   canvas.height = h;
   ctx.drawImage(img, 0, 0, w, h);
   var pixelized = canvas.toDataURL();
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  canvas.parentElement.removeChild(canvas);
+  canvas = undefined;
   start(logo, pixelized);
 }
 

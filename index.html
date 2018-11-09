@@ -2,11 +2,21 @@
   <head>
     <title>Effect 1</title>
     <style>
-      img {image-rendering: pixelated;}
+      img {
+        image-rendering: pixelated;
+      }
+      .center {
+        position: absolute;
+        top: 0; bottom:0; left: 0; right:0;
+        margin: auto;
+      }
+      body {
+        position: relative;
+      }
     </style>
   </head>
   <body>
-    <img id="t2"/>
+    <img id="t2" class="center"/>
     <canvas id="target" width="640" height="480"></canvas>
     <script src="src/index.js"></script>
   </body>
