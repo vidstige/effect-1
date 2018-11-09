@@ -1,7 +1,7 @@
 const logo = require('../static/logo.svg');
 
 function start(img1, img2) {
-  var im = document.getElementById('t2');
+  var im = document.getElementById('target');
   im.width = 640;
   
   function animate(t) {
@@ -18,7 +18,7 @@ function start(img1, img2) {
 
 var img = new Image();
 img.onload = function() {
-  var canvas = document.getElementById('target');
+  var canvas = document.getElementById('work');
   var ctx = canvas.getContext('2d');
 
   var w = 64;
