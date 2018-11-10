@@ -4,13 +4,13 @@ const raw = [
   require('../static/logo-3.svg')];
 
 function start(images) {
+  console.log(images);
   // Drop canvas
   var canvas = document.getElementById('work');
   canvas.parentElement.removeChild(canvas);
   canvas = undefined;
-  
 
-  var duration = 500;
+  var duration = 200;
   var im = document.getElementById('target');
   im.width = 640;
   
@@ -44,17 +44,20 @@ function loadImage(src) {
   });
 }
 
-var images = []; // All images
-function store(image) {
-  images.push(image);
-  return image;
-}
+//var crisp = [];
+//var pixelized = [];
+var images = [];
 
 var loaders = [];
 for (var i = 0; i < raw.length; i++) {
-  store(raw[i]);
+  //crisp.push(i);
+  images[2*i] = raw[i];
   loaders.push(
-    loadImage(raw[i]).then(pixelify).then(store)
+    loadImage(raw[i]).then(pixelify).then((function(index) {
+      return function(img) {
+        images[2*index+1] = img;
+      };
+    })(i))
   );
 }
 Promise.all(loaders).then(function() { start(images); });
