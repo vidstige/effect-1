@@ -1,6 +1,15 @@
-const logo = require('../static/logo.svg');
+const raw = [
+  require('../static/logo-1.svg'),
+  require('../static/logo-2.svg'),
+  require('../static/logo-3.svg')];
 
 function start(images) {
+  // Drop canvas
+  var canvas = document.getElementById('work');
+  canvas.parentElement.removeChild(canvas);
+  canvas = undefined;
+  
+
   var duration = 500;
   var im = document.getElementById('target');
   im.width = 640;
@@ -13,32 +22,39 @@ function start(images) {
   requestAnimationFrame(animate);
 }
 
-var img = new Image();
-img.onload = function() {
+function pixelify(img) {
   var canvas = document.getElementById('work');
   var ctx = canvas.getContext('2d');
 
-  widths = [63];
-  colors = ['#e1706e', '#f2cfc9', '#4a8daf', '#d8d8d8', '#6ec3d0', '#1c2b49]'];
-
-  images = [logo];
-  for (var i = 0; i < widths.length; i++) {
-    var w = widths[i];
-    var h = w * img.height / img.width;
-    for (var j = 0; j < colors.length; j++) {
-      canvas.width = w;
-      canvas.height = h;
-      ctx.clearRect(0, 0, w, h);
-      ctx.drawImage(img, 0, 0, w, h);
-      ctx.globalCompositeOperation = 'source-in';
-      ctx.fillStyle = colors[j];
-      ctx.fillRect(0, 0, w, h);
-      images.push(canvas.toDataURL());
-    }
-  }
-  canvas.parentElement.removeChild(canvas);
-  canvas = undefined;
-  start(images);
+  var w = 64;
+  var h = w * img.height / img.width;
+  canvas.width = w;
+  canvas.height = h;
+  ctx.clearRect(0, 0, w, h);
+  ctx.drawImage(img, 0, 0, w, h);
+  return canvas.toDataURL();
 }
 
-img.src = logo;
+function loadImage(src) {
+  return new Promise(function(resolve, reject) {
+    var img = new Image();
+    img.onload = function() { resolve(img); };
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+var images = []; // All images
+function store(image) {
+  images.push(image);
+  return image;
+}
+
+var loaders = [];
+for (var i = 0; i < raw.length; i++) {
+  store(raw[i]);
+  loaders.push(
+    loadImage(raw[i]).then(pixelify).then(store)
+  );
+}
+Promise.all(loaders).then(function() { start(images); });
