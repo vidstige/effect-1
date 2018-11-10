@@ -9,16 +9,20 @@ function start(images) {
   canvas.parentElement.removeChild(canvas);
   canvas = undefined;
 
-  var duration = 200;
+  var duration = 30;
   var im = document.getElementById('target');
   im.width = 640;
   
-  var step = [0, 0, 1];
+  var step = [null, 0, 0, 0, 0, 0, 1, 1, 1];
   function animate(t) {
     // 001 223 445
-    var k = Math.floor(t % (3*duration * images.length / 2) / duration);
-    var index = 2*Math.floor(k/3) + step[k % 3];
-    im.src = images[index];
+    var k = Math.floor(t % (step.length*duration * images.length / 2) / duration);
+    var index = 2*Math.floor(k/step.length) + step[k % step.length];
+    if (index) {
+      im.src = images[index];
+    } else {
+      im.src = undefined;
+    }
     requestAnimationFrame(animate);
   }
   requestAnimationFrame(animate);
