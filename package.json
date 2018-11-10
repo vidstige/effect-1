@@ -6,7 +6,7 @@
   "scripts": {
     "start": "parcel index.html",
     "lint": "eslint src/*.js",
-    "build": "parcel build index.html",
+    "build": "parcel build index.html --public-url=. --out-dir=docs/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
