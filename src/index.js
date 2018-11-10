@@ -4,7 +4,6 @@ const raw = [
   require('../static/logo-3.svg')];
 
 function start(images) {
-  console.log(images);
   // Drop canvas
   var canvas = document.getElementById('work');
   canvas.parentElement.removeChild(canvas);
@@ -14,8 +13,11 @@ function start(images) {
   var im = document.getElementById('target');
   im.width = 640;
   
+  var step = [0, 0, 1];
   function animate(t) {
-    var index = Math.floor(t % (duration * images.length) / duration);
+    // 001 223 445
+    var k = Math.floor(t % (3*duration * images.length / 2) / duration);
+    var index = 2*Math.floor(k/3) + step[k % 3];
     im.src = images[index];
     requestAnimationFrame(animate);
   }
